@@ -1,8 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import * as BooksAPI from "../BooksAPI";
 import Book from "./../Components/Book";
 import "../App.css";
+import { unwatchFile } from "fs";
 
 class Search extends React.Component {
     constructor(props) {
@@ -33,8 +33,19 @@ class Search extends React.Component {
 
     render() {
         let bookList = [];
+        console.log(this.props.filteredBookList);
+
         if (this.state.bookList.length > 0) {
             this.state.bookList.forEach(book => {
+                book.shelf = "none";
+                let bookOnShelf = this.props.filteredBookList.filter(
+                    filteredBook => {
+                        return filteredBook.id === book.id;
+                    }
+                );
+
+                bookOnShelf[0] && (book.shelf = bookOnShelf[0].shelf);
+
                 bookList.push(
                     <Book
                         key={book.id}
@@ -53,9 +64,12 @@ class Search extends React.Component {
         return (
             <div className="search-books">
                 <div className="search-books-bar">
-                    <a onClick={() => this.props.handleClickReturnHome()}>
-                        <button className="close-search">Close</button>
-                    </a>
+                    <button
+                        onClick={() => this.props.handleClickReturnHome()}
+                        className="close-search"
+                    >
+                        Close
+                    </button>
                     <div className="search-books-input-wrapper">
                         {/*
               NOTES: The search from BooksAPI is limited to a particular set of search terms.

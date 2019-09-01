@@ -16,8 +16,6 @@ class BooksApp extends React.Component {
             myBookList = this.state.myBookList,
             myBook = book;
 
-        console.log(selectedShelfCategory);
-
         if (book.shelf) {
             myBook = myBookList.filter(myBook => {
                 return myBook.id === bookId;
@@ -51,18 +49,12 @@ class BooksApp extends React.Component {
     };
 
     handleClickReturnHome = () => {
-        BooksAPI.getAll().then(books => {
-            this.setState({
-                myBookList: books
-            });
-            this.props.history.push("/");
-        });
+        this.props.history.push("/");
     };
 
     async componentDidMount() {
         // load all book list
         let books = await BooksAPI.getAll();
-        console.log(books);
         this.setState({
             isBooksLoaded: true,
             myBookList: books
@@ -70,6 +62,16 @@ class BooksApp extends React.Component {
     }
 
     render() {
+        let filteredBookList = [];
+        if (this.state.isBooksLoaded) {
+            this.state.myBookList.forEach(book => {
+                filteredBookList.push({
+                    id: book.id,
+                    shelf: book.shelf
+                });
+            });
+        }
+
         return (
             <div className="app">
                 <Route
@@ -90,6 +92,7 @@ class BooksApp extends React.Component {
                     path="/search"
                     component={() => (
                         <Search
+                            filteredBookList={filteredBookList}
                             handleClickSelectedBook={
                                 this.handleClickSelectedSearchBook
                             }
