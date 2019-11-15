@@ -7,21 +7,27 @@ class Search extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            bookList: []
+            bookList: [],
+            searchTerm: ''
         };
     }
 
     handleChangeSearchTerm = e => {
         let searchTerm = e.target.value;
+        this.setState({
+            searchTerm: searchTerm
+        })
         if (searchTerm.length > 0) {
             BooksAPI.search(searchTerm).then(bookList => {
-                Array.isArray(bookList)
-                    ? this.setState({
-                          bookList: bookList
-                      })
-                    : this.setState({
-                          bookList: []
-                      });
+                if(searchTerm === this.state.searchTerm){
+                    Array.isArray(bookList)
+                        ? this.setState({
+                              bookList: bookList
+                          })
+                        : this.setState({
+                              bookList: []
+                          });
+                }
             });
         } else {
             this.setState({
@@ -32,10 +38,9 @@ class Search extends React.Component {
 
     render() {
         let bookList = [];
-        console.log(this.props.filteredBookList);
 
         if (this.state.bookList.length > 0) {
-            this.state.bookList.forEach(book => {
+            this.state.bookList.forEach((book,idx) => {
                 book.shelf = "none";
                 let bookOnShelf = this.props.filteredBookList.filter(
                     filteredBook => {
@@ -58,7 +63,7 @@ class Search extends React.Component {
                 );
             });
         } else {
-            bookList.push(<div>No result...</div>);
+            bookList.push(<div key="na">No result...</div>);
         }
         return (
             <div className="search-books">

@@ -53,15 +53,6 @@ class BooksApp extends React.Component {
                 });
             });
         });
-
-        // BooksAPI.update(myBook[0], selectedShelfCategory);
-
-        // BooksAPI.getAll().then(books => {
-        //     this.setState({
-        //         isBooksLoaded: true,
-        //         myBookList: books
-        //     });
-        // });
     }
 
     handleClickReturnHome = () => {
