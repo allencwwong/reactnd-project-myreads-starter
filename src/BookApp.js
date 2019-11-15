@@ -45,8 +45,24 @@ class BooksApp extends React.Component {
 
         console.log(myBook[0], selectedShelfCategory);
 
-        BooksAPI.update(myBook[0], selectedShelfCategory);
-    };
+        BooksAPI.update(myBook[0], selectedShelfCategory).then(() => {
+            BooksAPI.getAll().then(books => {
+                this.setState({
+                    isBooksLoaded: true,
+                    myBookList: books
+                });
+            });
+        });
+
+        // BooksAPI.update(myBook[0], selectedShelfCategory);
+
+        // BooksAPI.getAll().then(books => {
+        //     this.setState({
+        //         isBooksLoaded: true,
+        //         myBookList: books
+        //     });
+        // });
+    }
 
     handleClickReturnHome = () => {
         this.props.history.push("/");
@@ -77,7 +93,7 @@ class BooksApp extends React.Component {
                 <Route
                     exact
                     path="/"
-                    component={props => (
+                    render={props => (
                         <Bookshelf
                             {...props}
                             isBooksLoaded={this.state.isBooksLoaded}
@@ -90,7 +106,7 @@ class BooksApp extends React.Component {
                 />
                 <Route
                     path="/search"
-                    component={() => (
+                    render={() => (
                         <Search
                             filteredBookList={filteredBookList}
                             handleClickSelectedBook={

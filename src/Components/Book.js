@@ -1,6 +1,5 @@
 import React from "react";
 import "../App.css";
-import BookChanger from "./BookChanger";
 
 class Book extends React.Component {
     render() {
